@@ -19,11 +19,13 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 
 
-def detect(dir, min_score_thresh=0.05, draw_box=True):
+def detect(dir, min_score_thresh=0.05, draw_box=True,
+           out_dir="../data/processed"):
     images = get_images(dir)
     df = run_detection(images,
                        min_score_thresh=min_score_thresh,
-                       draw_box=draw_box)
+                       draw_box=draw_box,
+                       out_dir=out_dir)
     return df
 
 
@@ -44,15 +46,16 @@ def get_images(dir):
     return images
 
 
-def run_detection(images, min_score_thresh=0.05, draw_box=True):
+def run_detection(images, min_score_thresh=0.05, draw_box=True, out_dir="."):
     # Path to frozen detection graph. This is the actual model that is used for
     # the object detection.
     MODEL_NAME = 'faster_rcnn_resnet101_coco_11_06_2017'
     PATH_TO_CKPT = os.path.join("../models",
                                 MODEL_NAME + '/frozen_inference_graph.pb')
     # List of the strings that is used to add correct label for each box.
-    PATH_TO_LABELS = os.path.join('../src/models/research/object_detection/data',
-                                  'mscoco_label_map.pbtxt')
+    PATH_TO_LABELS = os.path.join(
+        '../src/models/research/object_detection/data',
+        'mscoco_label_map.pbtxt')
 
     NUM_CLASSES = 90
 
@@ -102,7 +105,8 @@ def run_detection(images, min_score_thresh=0.05, draw_box=True):
                     category_index,
                     image_dict['path'],
                     min_score_thresh=min_score_thresh,
-                    draw_box=draw_box
+                    draw_box=draw_box,
+                    out_dir=out_dir
                 )
 
                 image_dict['ped_exp'] = ep
@@ -125,7 +129,8 @@ def expected_person(image,
                     filename,
                     max_boxes_to_draw=200,
                     min_score_thresh=.05,
-                    draw_box=True):
+                    draw_box=True,
+                    out_dir="."):
 
     box_to_display_str_map = collections.defaultdict(list)
     box_to_color_map = collections.defaultdict(str)
@@ -148,6 +153,8 @@ def expected_person(image,
 
     # Draw all boxes onto image.
     if draw_box:
+        if not os.path.exists(out_dir):
+            os.mkdir(out_dir)
         for box, display_str in box_to_display_str_map.items():
             ymin, xmin, ymax, xmax = box
             color = 'DarkOrange'
@@ -165,6 +172,6 @@ def expected_person(image,
         im = Image.fromarray(image)
         image_path, image_name = os.path.split(filename)
         image_name = image_name.replace(".jpg", "_anno.jpeg")
-        im.save(os.path.join("../data/processed", image_name))
+        im.save(os.path.join(out_dir, image_name))
 
     return expected_person
