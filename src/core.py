@@ -11,9 +11,9 @@ import re
 from PIL import Image
 import pandas as pd
 
-sys.path.append("../../models/research/object_detection")
-sys.path.append("../../models")
-sys.path.append("../../models/research")
+sys.path.append("../src/models/research/object_detection")
+sys.path.append("../src/models")
+sys.path.append("../src/models/research")
 
 from utils import label_map_util
 from utils import visualization_utils as vis_util
@@ -51,7 +51,7 @@ def run_detection(images, min_score_thresh=0.05, draw_box=True):
     PATH_TO_CKPT = os.path.join("../models",
                                 MODEL_NAME + '/frozen_inference_graph.pb')
     # List of the strings that is used to add correct label for each box.
-    PATH_TO_LABELS = os.path.join('../models/research/object_detection/data',
+    PATH_TO_LABELS = os.path.join('../src/models/research/object_detection/data',
                                   'mscoco_label_map.pbtxt')
 
     NUM_CLASSES = 90
@@ -162,8 +162,9 @@ def expected_person(image,
                 display_str_list=display_str,
                 use_normalized_coordinates=True)
 
-        image_name = filename.replace(".jpg", "_anno.jpeg")
         im = Image.fromarray(image)
-        im.save(image_name)
+        image_path, image_name = os.path.split(filename)
+        image_name = image_name.replace(".jpg", "_anno.jpeg")
+        im.save(os.path.join("../data/processed", image_name))
 
     return expected_person

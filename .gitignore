@@ -79,3 +79,4 @@ target/
 /data/
 src/models/
 models/*
+src/.ropeproject
