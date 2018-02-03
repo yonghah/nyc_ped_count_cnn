@@ -1,8 +1,8 @@
 nyc_ped_count_cnn
 ==============================
 
-This project explores the possiblity of using Google Street View -> Object Detection as a quick
-alternative way of measuring pedestrian volume in a city.
+This project explores the possiblity of using Google Street View -> Object Detection with CNN 
+as a quick alternative way of measuring pedestrian volume in a city.
 
 ## Overview
 
@@ -19,6 +19,8 @@ alternative way of measuring pedestrian volume in a city.
 ## Collecting Google Street View
 - collected 18 GSVs per location (total 18 * 114 = 2052 images)
 - used [streetscape](https://github.com/yonghah/streetscape)
+<img src="https://user-images.githubusercontent.com/3218468/35771925-e17728e8-0902-11e8-9a3a-3eeadb302764.png" width=400>
+
 
 ## Pedestrian Detection
 - [Google Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) is used.
@@ -26,5 +28,6 @@ alternative way of measuring pedestrian volume in a city.
 <img src="reports/figures/LOC_0_h280_anno.jpeg" width="400">
 
 ## Compare two estimations
-r=0.72
 <img src="reports/figures/cnn-field-comparison.png" width="400">
+
+r=0.72
