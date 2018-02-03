@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import logging
 
 import numpy as np
 import os
@@ -46,6 +47,15 @@ def get_images(dir):
     return images
 
 
+def set_result_logger(out_dir):
+    ''' to do '''
+    logging.basicConfig(
+        filename=os.path.join(out_dir, "result.log"),
+        filemode="w",
+        format="%(message)s",
+        level=logging.INFO)
+
+
 def run_detection(images, min_score_thresh=0.05, draw_box=True, out_dir="."):
     # Path to frozen detection graph. This is the actual model that is used for
     # the object detection.
@@ -76,6 +86,7 @@ def run_detection(images, min_score_thresh=0.05, draw_box=True, out_dir="."):
         use_display_name=True)
     category_index = label_map_util.create_category_index(categories)
 
+    identified = list()
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
             for image_dict in images:
@@ -104,14 +115,16 @@ def run_detection(images, min_score_thresh=0.05, draw_box=True, out_dir="."):
                     np.squeeze(scores),
                     category_index,
                     image_dict['path'],
+                    image_dict['lid'],
                     min_score_thresh=min_score_thresh,
                     draw_box=draw_box,
                     out_dir=out_dir
                 )
 
-                image_dict['ped_exp'] = ep
+                # image_dict['ped_exp'] = ep
+                identified += ep
 
-    df = pd.DataFrame(images)
+    df = pd.DataFrame(identified)
     return df
 
 
@@ -127,6 +140,7 @@ def expected_person(image,
                     scores,
                     category_index,
                     filename,
+                    lid,
                     max_boxes_to_draw=200,
                     min_score_thresh=.05,
                     draw_box=True,
@@ -134,15 +148,22 @@ def expected_person(image,
 
     box_to_display_str_map = collections.defaultdict(list)
     box_to_color_map = collections.defaultdict(str)
+    image_path, image_name = os.path.split(filename)
 
     if not max_boxes_to_draw:
         max_boxes_to_draw = boxes.shape[0]
 
     expected_person = 0
+    identified_people = []
     for i in range(min(max_boxes_to_draw, boxes.shape[0])):
         if scores is None or scores[i] > min_score_thresh:
             class_name = category_index[classes[i]]['name']
             if class_name == 'person':
+                identified_people.append({
+                    'lid': lid,
+                    'score': scores[i],
+                    'image': image_name
+                })
                 expected_person += scores[i]
                 display_str = '{}: {}%'.format(
                     class_name,
@@ -170,8 +191,8 @@ def expected_person(image,
                 use_normalized_coordinates=True)
 
         im = Image.fromarray(image)
-        image_path, image_name = os.path.split(filename)
         image_name = image_name.replace(".jpg", "_anno.jpeg")
         im.save(os.path.join(out_dir, image_name))
 
-    return expected_person
+    # return expected_person
+    return identified_people
