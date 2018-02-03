@@ -19,15 +19,18 @@ as a quick alternative way of measuring pedestrian volume in a city.
 ## Collecting Google Street View
 - collected 18 GSVs per location (total 18 * 114 = 2052 images)
 - used [streetscape](https://github.com/yonghah/streetscape)
+- See my Jupyter notebook for the details: https://github.com/yonghah/nyc_ped_count_cnn/blob/master/notebooks/01-Get-Street-Views-NYC.ipynb
 <img src="https://user-images.githubusercontent.com/3218468/35771925-e17728e8-0902-11e8-9a3a-3eeadb302764.png" width=400>
 
 
 ## Pedestrian Detection
 - [Google Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) is used.
 - Processed on Amazon AWS p2.xlarge (~30 min)
+- See my Jupyter notebook for the details: https://github.com/yonghah/nyc_ped_count_cnn/blob/master/notebooks/02-detect-pedestrians.ipynb
 <img src="reports/figures/LOC_0_h280_anno.jpeg" width="400">
 
 ## Compare two estimations
+- See my Jupyter notebook for the details: https://github.com/yonghah/nyc_ped_count_cnn/blob/master/notebooks/03-Compare-two-datasets.ipynb
 <img src="reports/figures/cnn-field-comparison.png" width="400">
 
 r=0.72
