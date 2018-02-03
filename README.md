@@ -1,56 +1,30 @@
 nyc_ped_count_cnn
 ==============================
 
-pedestrian count with cnn for NYC
+This project explores the possiblity of using Google Street View -> Object Detection as a quick
+alternative way of measuring pedestrian volume in a city.
 
-Project Organization
-------------
+## Overview
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.testrun.org
+1. Collecting panoramic street views (Google Street View API) 
+2. Object Detection with Faster-RCNN (Google Object Detection API)
+3. Evaluation with NYC Pedestrian Data
 
+## NYC Bi-Annual Citywide Pedestrian Counts
+- Collected by human agents from 114 locations in May & September
+- Midweek(7-9am, 4-7pm) and adjacent Saturday (12-2pm)
+- http://www.nyc.gov/html/dot/html/about/datafeeds.shtml#Pedestrians
+<img src="reports/figures/NYC_ped_count_locations.png" width="200">
 
---------
+## Collecting Google Street View
+- collected 18 GSVs per location (total 18 * 114 = 2052 images)
+- used [streetscape](https://github.com/yonghah/streetscape)
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+## Pedestrian Detection
+- [Google Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) is used.
+- Processed on Amazon AWS p2.xlarge (~30 min)
+<img src="reports/figures/LOC_0_h280_anno.jpeg" width="400">
+
+## Compare two estimations
+r=0.72
+<img src="reports/figures/cnn-field-comparison.png" width="400">
