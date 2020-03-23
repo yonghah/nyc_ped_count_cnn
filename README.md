@@ -29,5 +29,9 @@ as a quick alternative way of measuring pedestrian volume in a city.
 - See my Jupyter notebook for the details: https://github.com/yonghah/nyc_ped_count_cnn/blob/master/notebooks/02-detect-pedestrians-pytorch.ipynb
 <img src="reports/figures/LOC_0_h280_anno.jpeg" width="400">
 
+## Data Clean Up
+https://nbviewer.jupyter.org/github/yonghah/nyc_ped_count_cnn/blob/master/notebooks/03-dataset-cleaning.ipynb
+
+
 ## Compare two estimations
 - See my Jupyter notebook for the details:https://nbviewer.jupyter.org/github/yonghah/nyc_ped_count_cnn/blob/master/notebooks/04-Compare-two-datasets.ipynb
